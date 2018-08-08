@@ -1,0 +1,25 @@
+input_number:
+  mqtt_shade:
+    name: MQTT Shade
+    initial: 0
+    min: 0
+    max: 13
+    step: 1
+
+automation old:
+  - alias: Send MQTT Shade Value
+    trigger:
+      platform: state
+      entity_id: input_number.mqtt_shade
+    action:
+      - service: mqtt.publish
+        data_template:
+          #change the topic to "shadePosition/[your client id]
+          topic: "shadePosition/shade_stepper" 
+          #if you change the name from mqtt_shade you'll need to change this line to your new name
+          payload_template: "{{ states('input_number.mqtt_shade')  | int }}"
+          qos: 2
+          retain: true
+          
+          
+          
